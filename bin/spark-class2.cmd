@@ -98,6 +98,9 @@ if "%jversion%" geq "1.8.0" (
 )
 rem Attention: when changing the way the JAVA_OPTS are assembled, the change must be reflected in CommandUtils.scala!
 
+rem Add HDInsight component into SPARK_LIBRARY_PATH
+set SPARK_LIBRARY_PATH=%SPARK_LIBRARY_PATH%;"%HADOOP_HOME%\bin"
+
 rem Test whether the user has built Spark
 if exist "%FWDIR%RELEASE" goto skip_build_test
 set FOUND_JAR=0
