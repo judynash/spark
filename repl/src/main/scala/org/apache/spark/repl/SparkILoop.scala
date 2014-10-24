@@ -972,7 +972,7 @@ class SparkILoop(in0: Option[BufferedReader], protected val out: JPrintWriter,
     val jars = SparkILoop.getAddedJars
     val conf = new SparkConf()
       .setMaster(getMaster())
-      .setAppName("Spark shell")
+      .setAppName("Sparkshell")
       .setJars(jars)
       .set("spark.repl.class.uri", intp.classServer.uri)
     if (execUri != null) {
