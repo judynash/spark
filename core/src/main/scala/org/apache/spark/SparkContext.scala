@@ -188,7 +188,7 @@ class SparkContext(config: SparkConf) extends SparkStatusAPI with Logging {
   val master = conf.get("spark.master")
   val appName = conf.get("spark.app.name")
 
-  private[spark] val isEventLogEnabled = conf.getBoolean("spark.eventLog.enabled", false)
+  private[spark] val isEventLogEnabled = conf.getBoolean("spark.eventLog.enabled", true)
   private[spark] val eventLogDir: Option[String] = {
     if (isEventLogEnabled) {
       Some(conf.get("spark.eventLog.dir", EventLoggingListener.DEFAULT_LOG_DIR).stripSuffix("/"))
@@ -1721,3 +1721,4 @@ private[spark] class WritableConverter[T](
     val writableClass: ClassTag[T] => Class[_ <: Writable],
     val convert: Writable => T)
   extends Serializable
+
