@@ -105,7 +105,7 @@ trait ExecutorRunnableUtil extends Logging {
       // an inconsistent state.
       // TODO: If the OOM is not recoverable by rescheduling it on different node, then do
       // 'something' to fail job ... akin to blacklisting trackers in mapred ?
-      "-XX:OnOutOfMemoryError='kill %p'") ++
+      "-XX:OnOutOfMemoryError=\"taskkill /F /PID %%%%p\"") ++
       javaOpts ++
       Seq("org.apache.spark.executor.CoarseGrainedExecutorBackend",
       masterAddress.toString,

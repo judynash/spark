@@ -92,6 +92,9 @@ rem Attention: when changing the way the JAVA_OPTS are assembled, the change mus
 rem Set JAVA_OPTS to be able to load native libraries and to set heap size
 set JAVA_OPTS=-XX:MaxPermSize=128m %OUR_JAVA_OPTS% -Xms%OUR_JAVA_MEM% -Xmx%OUR_JAVA_MEM%
 
+rem Add HDInsight component into SPARK_LIBRARY_PATH
+set SPARK_LIBRARY_PATH=%SPARK_LIBRARY_PATH%;"%HADOOP_HOME%\bin"
+
 rem Test whether the user has built Spark
 if exist "%FWDIR%RELEASE" goto skip_build_test
 set FOUND_JAR=0
