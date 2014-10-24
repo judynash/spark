@@ -19,7 +19,9 @@ rem
 
 rem NOTE: Any changes in this file must be reflected in SparkSubmitDriverBootstrapper.scala!
 
-set SPARK_HOME=%~dp0..
+if "%SPARK_HOME%" == "" ( 
+  set SPARK_HOME=%~dp0..
+) 
 set ORIG_ARGS=%*
 
 rem Reset the values of all variables used
