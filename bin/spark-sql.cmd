@@ -26,4 +26,38 @@ set CLASS_NOT_FOUND_EXIT_STATUS=1
 
 set FWDIR=%~dp0..\
 
-%FWDIR%bin\spark-submit --class %CLASS% %* spark-internal 
+if "%1"=="--help" (
+        goto usage
+)    
+
+set SUBMIT_USAGE_FUNCTION=usage
+
+@rem gatherSParkSubmitOpts seperates parameters into SUBMISSION_OPTS and APPLICATION_OPTS
+call %FWDIR%bin\utils.cmd gatherSparkSubmitOpts %*
+
+%FWDIR%bin\spark-submit --class %CLASS% %SUBMISSION_OPTS% spark-internal %APPLICATION_OPTS%
+
+set exit_status=%ERRORLEVEL%
+
+if %exit_status% == %CLASS_NOT_FOUND_EXIT_STATUS% (
+    echo
+    echo Failed to load Hive Thrift server main class %CLASS%.
+    echo You need to build Spark with -Phive.
+)
+
+exit /B %ERRORLEVEL%
+
+:usage
+    echo Usage: .\sbin\start-thriftserver [options] [thrift server options]
+    set pattern="usage"
+    set pattern=%pattern%"|Spark assembly has been built with Hive"
+    set pattern=%pattern%"|NOTE: SPARK_PREPEND_CLASSES is set"
+    set pattern=%pattern%"|Spark Command: "
+    set pattern=%pattern%"|======="
+    set pattern=%pattern%"|--help"
+
+    %FWDIR%bin\spark-submit --help 2>&1 | findstr /v Usage 1>&2
+    echo.
+    echo Thrift server options:
+    %FWDIR%bin\spark-class %CLASS% --help 2>&1 | findstr /v "%pattern%" 1>&2
+    goto :eof
