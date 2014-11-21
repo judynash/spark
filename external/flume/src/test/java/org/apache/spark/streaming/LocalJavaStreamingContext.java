@@ -15,19 +15,26 @@
  * limitations under the License.
  */
 
-package org.apache.spark.mllib.util
+package org.apache.spark.streaming;
 
-import org.scalatest.{BeforeAndAfterAll, Suite}
+import org.apache.spark.streaming.api.java.JavaStreamingContext;
+import org.junit.After;
+import org.junit.Before;
 
-import org.apache.spark.SparkContext
-import org.apache.spark.sql.SQLContext
+public abstract class LocalJavaStreamingContext {
 
-trait LocalSparkContext extends BeforeAndAfterAll { self: Suite =>
-  @transient val sc = new SparkContext("local", "test")
-  @transient lazy val sqlContext = new SQLContext(sc)
+    protected transient JavaStreamingContext ssc;
 
-  override def afterAll() {
-    sc.stop()
-    super.afterAll()
-  }
+    @Before
+    public void setUp() {
+        System.setProperty("spark.streaming.clock", "org.apache.spark.streaming.util.ManualClock");
+        ssc = new JavaStreamingContext("local[2]", "test", new Duration(1000));
+        ssc.checkpoint("checkpoint");
+    }
+
+    @After
+    public void tearDown() {
+        ssc.stop();
+        ssc = null;
+    }
 }
